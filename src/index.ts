@@ -1,10 +1,9 @@
 /**
- * sasaki API Node.js Client
- *
+ * TTTS API Node.js Client
  * @ignore
  */
 
-import * as sasaki from '@motionpicture/ttts-api-abstract-client';
+import * as tttsapi from '@motionpicture/ttts-api-abstract-client';
 
 import ClientCredentialsClient from './auth/clientCredentialsClient';
 import OAuth2client from './auth/oAuth2client';
@@ -15,10 +14,10 @@ import OAuth2client from './auth/oAuth2client';
  * 全てのオブジェクトのインターフェースはここに含まれます。
  * @export
  */
-export import factory = sasaki.factory;
+export import factory = tttsapi.factory;
 
-export import service = sasaki.service;
-export import transporters = sasaki.transporters;
+export import service = tttsapi.service;
+export import transporters = tttsapi.transporters;
 
 /**
  * each OAuth2 clients
