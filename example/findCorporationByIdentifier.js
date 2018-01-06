@@ -1,5 +1,5 @@
 /**
- * パフォーマンス検索サンプル
+ * 識別子で企業組織検索サンプル
  * @ignore
  */
 
@@ -12,22 +12,20 @@ async function main() {
         clientId: process.env.TEST_CLIENT_ID,
         clientSecret: process.env.TEST_CLIENT_SECRET,
         scopes: [
-            process.env.TEST_RESOURCE_IDENTIFIER + '/performances.read-only'
+            process.env.TEST_RESOURCE_IDENTIFIER + '/organizations.read-only'
         ],
         state: 'teststate'
     });
 
-    const event = new tttsapi.service.Event({
+    const organizations = new tttsapi.service.Organization({
         endpoint: process.env.TEST_API_ENDPOINT,
         auth: auth
     });
 
-    const performances = await event.searchPerformances({
-        start_from: moment().add(1, 'day').toDate(),
-        start_through: moment().add(2, 'day').toDate()
+    const organization = await organizations.findCorporationByIdentifier({
+        identifier: 'TokyoTower'
     });
-    console.log('performances found', performances);
-    console.log('performances found', performances.data.length);
+    console.log('organization found', organization);
 }
 
 main().then(() => {

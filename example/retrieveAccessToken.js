@@ -4,7 +4,7 @@
 
 const open = require('open');
 const readline = require('readline');
-const sasaki = require('../lib/index');
+const tttsapi = require('../lib/index');
 
 async function main() {
     const scopes = [
@@ -17,7 +17,7 @@ async function main() {
         process.env.TEST_RESOURCE_IDENTIFIER + '/people.ownershipInfos.read-only'
     ];
 
-    const auth = new sasaki.auth.OAuth2({
+    const auth = new tttsapi.auth.OAuth2({
         domain: process.env.TEST_AUTHORIZE_SERVER_DOMAIN,
         clientId: process.env.TEST_CLIENT_ID_OAUTH2,
         clientSecret: process.env.TEST_CLIENT_SECRET_OAUTH2,

@@ -1,5 +1,5 @@
 /**
- * パフォーマンス検索サンプル
+ * IDでパフォーマンス検索サンプル
  * @ignore
  */
 
@@ -22,12 +22,10 @@ async function main() {
         auth: auth
     });
 
-    const performances = await event.searchPerformances({
-        start_from: moment().add(1, 'day').toDate(),
-        start_through: moment().add(2, 'day').toDate()
+    const performance = await event.findPerofrmanceById({
+        id: '171220001001020900'
     });
-    console.log('performances found', performances);
-    console.log('performances found', performances.data.length);
+    console.log('performance found', performance);
 }
 
 main().then(() => {

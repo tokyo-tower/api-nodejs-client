@@ -5,9 +5,9 @@
 
 const moment = require('moment');
 const util = require('util');
-const sasaki = require('../lib/index');
+const tttsapi = require('../lib/index');
 
-const auth = new sasaki.auth.ClientCredentials({
+const auth = new tttsapi.auth.ClientCredentials({
     domain: process.env.TEST_AUTHORIZE_SERVER_DOMAIN,
     clientId: process.env.TEST_CLIENT_ID,
     clientSecret: process.env.TEST_CLIENT_SECRET,
@@ -18,12 +18,12 @@ const auth = new sasaki.auth.ClientCredentials({
     state: 'teststate'
 });
 
-const event = new sasaki.service.Event({
+const event = new tttsapi.service.Event({
     endpoint: process.env.TEST_API_ENDPOINT,
     auth: auth
 });
 
-const placeOrderTransactions = new sasaki.service.transaction.PlaceOrder({
+const placeOrderTransactions = new tttsapi.service.transaction.PlaceOrder({
     endpoint: process.env.TEST_API_ENDPOINT,
     auth: auth
 });
