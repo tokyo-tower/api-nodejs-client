@@ -549,7 +549,7 @@ describe('fetch()', () => {
         it(`オプションに指定されたヘッダーが${typeof headers}の場合、正常に動作するはず`, async () => {
             const options = {
                 method: 'GET',
-                headers: headers
+                headers: <any>headers
             };
             const auth = new sasaki.auth.OAuth2({
                 domain: DOMAIN,

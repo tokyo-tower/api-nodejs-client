@@ -291,7 +291,7 @@ export default class OAuth2client implements Auth {
                     retry = false;
                 }
 
-                options.headers.Authorization = `Bearer ${await this.getAccessToken()}`;
+                (<any>options.headers).Authorization = `Bearer ${await this.getAccessToken()}`;
                 result = await this.makeFetch(url, options, expectedStatusCodes);
 
                 break;
