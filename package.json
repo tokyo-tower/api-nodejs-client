@@ -1,6 +1,6 @@
 {
   "name": "@motionpicture/ttts-api-nodejs-client",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "TTTS API client library for Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -79,7 +79,7 @@
     "typescript": "^2.6.2"
   },
   "dependencies": {
-    "@motionpicture/ttts-api-abstract-client": "0.0.0",
+    "@motionpicture/ttts-api-abstract-client": "0.0.1",
     "debug": "^3.1.0",
     "http-status": "^1.0.1",
     "isomorphic-fetch": "^2.2.1"

@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Security
 
 
+## v0.0.1 - 2018-01-21
+### Fixed
+- 管理者検索レスポンスの型を修正。
+
 ## v0.0.0 - 2018-01-17
 ### Added
 - クライアント認証クライントを追加。
