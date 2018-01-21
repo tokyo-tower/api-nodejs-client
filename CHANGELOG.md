@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Removed
 
 ### Fixed
+- 管理者検索レスポンスの型を修正。
 
 ### Security
 
