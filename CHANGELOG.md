@@ -13,10 +13,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Removed
 
 ### Fixed
-- 購入者情報登録のリクエストから国コードが除外されるバグを修正。
 
 ### Security
 
+
+## v0.0.2 - 2018-02-01
+### Fixed
+- 購入者情報登録のリクエストから国コードが除外されるバグを修正。
 
 ## v0.0.1 - 2018-01-21
 ### Fixed
