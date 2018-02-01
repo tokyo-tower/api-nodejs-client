@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Security
 
 
+## v0.0.2 - 2018-02-01
+### Fixed
+- 購入者情報登録のリクエストから国コードが除外されるバグを修正。
+
 ## v0.0.1 - 2018-01-21
 ### Fixed
 - 管理者検索レスポンスの型を修正。
