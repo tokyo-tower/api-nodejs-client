@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+- タスクサービスを追加
+- 注文取引検索を追加
+- パフォーマンス拡張属性更新を追加
+- 注文検索を追加
+- 予約キャンセルを追加
+- 予約印刷トークン発行を追加
+
 ### Changed
 
 - update ttts-api-abstract-client.

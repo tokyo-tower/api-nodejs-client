@@ -77,7 +77,9 @@ export default class OAuth2client implements Auth {
     }
 
     public static SHA256(buffer: any) {
-        return crypto.createHash('sha256').update(buffer).digest();
+        return crypto.createHash('sha256')
+            .update(buffer)
+            .digest();
     }
 
     /**
@@ -128,7 +130,8 @@ export default class OAuth2client implements Auth {
             grant_type: 'authorization_code',
             code_verifier: codeVerifier
         };
-        const secret = Buffer.from(`${this.options.clientId}:${this.options.clientSecret}`, 'utf8').toString('base64');
+        const secret = Buffer.from(`${this.options.clientId}:${this.options.clientSecret}`, 'utf8')
+            .toString('base64');
         const options: RequestInit = {
             body: querystring.stringify(form),
             method: 'POST',
@@ -143,29 +146,30 @@ export default class OAuth2client implements Auth {
         return fetch(
             `https://${this.options.domain}${OAuth2client.OAUTH2_TOKEN_URI}`,
             options
-        ).then(async (response) => {
-            debug('response:', response.status);
-            if (response.status !== OK) {
-                if (response.status === BAD_REQUEST) {
-                    const body = await response.json();
-                    throw new Error(body.error);
+        )
+            .then(async (response) => {
+                debug('response:', response.status);
+                if (response.status !== OK) {
+                    if (response.status === BAD_REQUEST) {
+                        const body = await response.json();
+                        throw new Error(body.error);
+                    } else {
+                        const body = await response.text();
+                        throw new Error(body);
+                    }
                 } else {
-                    const body = await response.text();
-                    throw new Error(body);
-                }
-            } else {
-                const tokens = await response.json();
-                // tslint:disable-next-line:no-single-line-block-comment
-                /* istanbul ignore else */
-                if (tokens && tokens.expires_in) {
-                    // tslint:disable-next-line:no-magic-numbers
-                    tokens.expiry_date = ((new Date()).getTime() + (tokens.expires_in * 1000));
-                    delete tokens.expires_in;
-                }
+                    const tokens = await response.json();
+                    // tslint:disable-next-line:no-single-line-block-comment
+                    /* istanbul ignore else */
+                    if (tokens && tokens.expires_in) {
+                        // tslint:disable-next-line:no-magic-numbers
+                        tokens.expiry_date = ((new Date()).getTime() + (tokens.expires_in * 1000));
+                        delete tokens.expires_in;
+                    }
 
-                return tokens;
-            }
-        });
+                    return tokens;
+                }
+            });
     }
 
     /**
@@ -583,7 +587,8 @@ export default class OAuth2client implements Auth {
             refresh_token: refreshToken,
             grant_type: 'refresh_token'
         };
-        const secret = Buffer.from(`${this.options.clientId}:${this.options.clientSecret}`, 'utf8').toString('base64');
+        const secret = Buffer.from(`${this.options.clientId}:${this.options.clientSecret}`, 'utf8')
+            .toString('base64');
         const options: RequestInit = {
             body: querystring.stringify(form),
             method: 'POST',
@@ -598,28 +603,29 @@ export default class OAuth2client implements Auth {
         return fetch(
             `https://${this.options.domain}${OAuth2client.OAUTH2_TOKEN_URI}`,
             options
-        ).then(async (response) => {
-            debug('response:', response.status);
-            if (response.status !== OK) {
-                if (response.status === BAD_REQUEST) {
-                    const body = await response.json();
-                    throw new Error(body.error);
+        )
+            .then(async (response) => {
+                debug('response:', response.status);
+                if (response.status !== OK) {
+                    if (response.status === BAD_REQUEST) {
+                        const body = await response.json();
+                        throw new Error(body.error);
+                    } else {
+                        const body = await response.text();
+                        throw new Error(body);
+                    }
                 } else {
-                    const body = await response.text();
-                    throw new Error(body);
-                }
-            } else {
-                const tokens = await response.json();
-                // tslint:disable-next-line:no-single-line-block-comment
-                /* istanbul ignore else */
-                if (tokens && tokens.expires_in) {
-                    // tslint:disable-next-line:no-magic-numbers
-                    tokens.expiry_date = ((new Date()).getTime() + (tokens.expires_in * 1000));
-                    delete tokens.expires_in;
-                }
+                    const tokens = await response.json();
+                    // tslint:disable-next-line:no-single-line-block-comment
+                    /* istanbul ignore else */
+                    if (tokens && tokens.expires_in) {
+                        // tslint:disable-next-line:no-magic-numbers
+                        tokens.expiry_date = ((new Date()).getTime() + (tokens.expires_in * 1000));
+                        delete tokens.expires_in;
+                    }
 
-                return tokens;
-            }
-        });
+                    return tokens;
+                }
+            });
     }
 }
