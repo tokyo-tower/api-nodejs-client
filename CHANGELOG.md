@@ -18,10 +18,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Changed
 
 - update ttts-api-abstract-client.
+- パフォーマンスインターフェースをChevre化に向けて補強
 
 ### Deprecated
 
 ### Removed
+
+- パフォーマンスデータから不要な項目を削除
 
 ### Fixed
 
