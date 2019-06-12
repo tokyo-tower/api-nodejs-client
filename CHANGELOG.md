@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 - update ttts-api-abstract-client.
 - パフォーマンスインターフェースをChevre化に向けて補強
+- 予約検索条件を拡張
 
 ### Deprecated
 
