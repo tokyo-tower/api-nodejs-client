@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- update ttts-api-abstract-client.
+- update ttts-factory.
 - パフォーマンスインターフェースをChevre化に向けて補強
 - 予約検索条件を拡張
 
@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Removed
 
 - パフォーマンスデータから不要な項目を削除
+- 券種からキャンセルチャージ属性を削除
 
 ### Fixed
 
