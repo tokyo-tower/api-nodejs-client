@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 - パフォーマンスデータから不要な項目を削除
 - 券種からキャンセルチャージ属性を削除
+- 予約インターフェースから不要な属性を削除
 
 ### Fixed
 
