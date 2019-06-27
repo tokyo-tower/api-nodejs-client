@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - update ttts-factory.
 - パフォーマンスインターフェースをChevre化に向けて補強
 - 予約検索条件を拡張
+- 予約の入場以外の全属性をChevre化
 
 ### Deprecated
 
@@ -27,7 +28,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 - パフォーマンスデータから不要な項目を削除
 - 券種からキャンセルチャージ属性を削除
-- 予約インターフェースから不要な属性を削除
 
 ### Fixed
 
