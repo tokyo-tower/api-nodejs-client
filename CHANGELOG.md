@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - 予約検索条件を拡張
 - 予約の入場以外の全属性をChevre化
 - 券種インターフェースをChevre化
+- パフォーマンス検索条件のChevre化
 
 ### Deprecated
 
