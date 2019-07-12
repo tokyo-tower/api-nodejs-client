@@ -12,8 +12,8 @@ const auth = new tttsapi.auth.ClientCredentials({
     clientId: process.env.TEST_CLIENT_ID,
     clientSecret: process.env.TEST_CLIENT_SECRET,
     scopes: [
-        process.env.TEST_RESOURCE_IDENTIFIER + '/performances.read-only',
-        process.env.TEST_RESOURCE_IDENTIFIER + '/transactions'
+        // process.env.TEST_RESOURCE_IDENTIFIER + '/performances.read-only',
+        // process.env.TEST_RESOURCE_IDENTIFIER + '/transactions'
     ],
     state: 'teststate'
 });
@@ -30,14 +30,15 @@ const placeOrderTransactions = new tttsapi.service.transaction.PlaceOrder({
 
 async function main() {
     const searchPerformancesResult = await event.searchPerformances({
-        start_from: moment().add(1, 'day').toDate(),
-        start_through: moment().add(2, 'day').toDate()
+        startFrom: moment().add(1, 'day').toDate(),
+        startThrough: moment().add(2, 'day').toDate()
     });
-    console.log('performances found', searchPerformancesResult.data.length);
-    const performances = searchPerformancesResult.data;
+    console.log('performances found', searchPerformancesResult.data.data.length);
+    const performances = searchPerformancesResult.data.data;
+    console.log(performances);
 
     const performance = performances.find((p) => p.attributes.seat_status > 0);
-    if (performances === undefined) {
+    if (performance === undefined) {
         throw new Error('予約可能なパフォーマンスが見つかりません。');
     }
 
@@ -65,7 +66,7 @@ async function main() {
             watcher_name: ''
         }]
     });
-    console.log('仮予約が作成されました。', seatReservationAuthorizeAction.result.tmpReservations[0].payment_no);
+    console.log('仮予約が作成されました。', seatReservationAuthorizeAction.id, seatReservationAuthorizeAction.result.tmpReservations[0].payment_no);
 
     console.log('券種を変更しています...');
     await wait(1000);
@@ -86,7 +87,7 @@ async function main() {
             watcher_name: ''
         }]
     });
-    console.log('仮予約が作成されました。', seatReservationAuthorizeAction.result.tmpReservations[0].payment_no);
+    console.log('仮予約が作成されました。', seatReservationAuthorizeAction.id, seatReservationAuthorizeAction.result.tmpReservations[0].payment_no);
 
     const amount = seatReservationAuthorizeAction.result.price;
     const orderIdPrefix = util.format(
@@ -97,7 +98,6 @@ async function main() {
         `00000000${seatReservationAuthorizeAction.result.tmpReservations[0].payment_no}`.slice(-8)
     );
     console.log('クレジットカードのオーソリをとります...', orderIdPrefix);
-    // tslint:disable-next-line:max-line-length
     const { creditCardAuthorizeAction, numberOfTryAuthorizeCreditCard } = await authorieCreditCardUntilSuccess(
         transaction.id, orderIdPrefix, amount
     );
@@ -110,7 +110,7 @@ async function main() {
         last_name: 'せい',
         first_name: 'めい',
         email: 'hello@motionpicture.jp',
-        tel: '09012345678',
+        tel: '+819012345678',
         gender: '0'
     };
     customerContact = await placeOrderTransactions.setCustomerContact({
@@ -124,9 +124,11 @@ async function main() {
     await wait(1000);
     const transactionResult = await placeOrderTransactions.confirm({
         transactionId: transaction.id,
-        paymentMethod: 'CreditCard'
+        paymentMethod: tttsapi.factory.paymentMethodType.CreditCard
+        // paymentMethod: tttsapi.factory.paymentMethodType.Cash
     });
     console.log('取引確定です。', transactionResult.eventReservations[0].payment_no);
+    console.log('取引確定です。', transactionResult.order.orderNumber);
 }
 
 const RETRY_INTERVAL_IN_MILLISECONDS = 1000;
