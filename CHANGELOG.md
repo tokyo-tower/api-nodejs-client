@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## v1.0.0 - 2019-07-12
+
+### Added
+
 - タスクサービスを追加
 - 注文取引検索を追加
 - パフォーマンス拡張属性更新を追加
@@ -24,18 +38,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - 券種インターフェースをChevre化
 - パフォーマンス検索条件のChevre化
 
-### Deprecated
-
 ### Removed
 
 - 券種からキャンセルチャージ属性を削除
 - 注文取引結果からeventReservationsを削除(order.acceptedOffersへ移行)
 - 仮予約インターフェースからrate_limit_unit_in_secondsを削除
 - パフォーマンスインターフェースから非推奨属性を削除
-
-### Fixed
-
-### Security
 
 ## v0.0.2 - 2018-02-01
 ### Fixed
