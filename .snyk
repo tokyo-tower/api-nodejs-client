@@ -1,0 +1,23 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:extend:20180424':
+    - '@motionpicture/ttts-api-abstract-client > @motionpicture/ttts-factory > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > request > extend':
+        patched: '2019-07-12T01:28:24.753Z'
+  'npm:hoek:20180212':
+    - '@motionpicture/ttts-api-abstract-client > @motionpicture/ttts-factory > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > request > hawk > hoek':
+        patched: '2019-07-12T01:28:24.753Z'
+    - '@motionpicture/ttts-api-abstract-client > @motionpicture/ttts-factory > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > request > hawk > boom > hoek':
+        patched: '2019-07-12T01:28:24.753Z'
+    - '@motionpicture/ttts-api-abstract-client > @motionpicture/ttts-factory > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > request > hawk > sntp > hoek':
+        patched: '2019-07-12T01:28:24.753Z'
+    - '@motionpicture/ttts-api-abstract-client > @motionpicture/ttts-factory > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > request > hawk > cryptiles > boom > hoek':
+        patched: '2019-07-12T01:28:24.753Z'
+  'npm:lodash:20180130':
+    - '@motionpicture/ttts-api-abstract-client > @motionpicture/ttts-factory > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > lodash':
+        patched: '2019-07-12T01:28:24.753Z'
+  'npm:stringstream:20180511':
+    - '@motionpicture/ttts-api-abstract-client > @motionpicture/ttts-factory > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > request > stringstream':
+        patched: '2019-07-12T01:28:24.753Z'

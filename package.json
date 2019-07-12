@@ -30,7 +30,9 @@
     "preversion": "npm run clean && npm run build && npm test",
     "version": "git add -A",
     "postversion": "git push origin --tags",
-    "prepublishOnly": "npm run clean && npm run build && npm test && npm run doc"
+    "prepublishOnly": "npm run clean && npm run build && npm test && npm run doc",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -78,6 +80,8 @@
     "@motionpicture/ttts-api-abstract-client": "^1.0.0",
     "debug": "^3.1.0",
     "http-status": "^1.0.1",
-    "isomorphic-fetch": "^2.2.1"
-  }
+    "isomorphic-fetch": "^2.2.1",
+    "snyk": "^1.193.0"
+  },
+  "snyk": true
 }
