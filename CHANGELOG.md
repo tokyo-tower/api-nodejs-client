@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.0.1 - 2019-07-19
+
+### Changed
+
+- install @tokyotower/factory
+
 ## v1.0.0 - 2019-07-12
 
 ### Added
