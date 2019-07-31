@@ -10,8 +10,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- update @tokyotower/factory
-
 ### Deprecated
 
 ### Removed
@@ -19,6 +17,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v1.2.0 - 2019-07-31
+
+### Changed
+
+- update @tokyotower/factory
 
 ## v1.1.0 - 2019-07-29
 
