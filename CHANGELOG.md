@@ -10,10 +10,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- 決済方法タイプをCinerino化
-- 座席予約承認結果をCinerino化
-- 座席予約承認結果からtmpReservationsを削除
-
 ### Deprecated
 
 ### Removed
@@ -21,6 +17,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v2.0.0 - 2019-10-07
+
+### Changed
+
+- 決済方法タイプをCinerino化
+- 座席予約承認結果をCinerino化
+- 座席予約承認結果からtmpReservationsを削除
 
 ## v1.3.1 - 2019-09-24
 
