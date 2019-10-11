@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
+- 注文返品タスクをCinerino化
+- 注文返品取引インターフェースをCinerino化
+
 ### Deprecated
 
 ### Removed

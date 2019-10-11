@@ -2,7 +2,6 @@
  * 注文取引サンプル
  */
 const moment = require('moment');
-const util = require('util');
 const tttsapi = require('../lib/index');
 
 const auth = new tttsapi.auth.ClientCredentials({
@@ -22,6 +21,11 @@ const event = new tttsapi.service.Event({
 });
 
 const placeOrderTransactions = new tttsapi.service.transaction.PlaceOrder({
+    endpoint: process.env.TEST_API_ENDPOINT,
+    auth: auth
+});
+
+const returnOrderService = new tttsapi.service.transaction.ReturnOrder({
     endpoint: process.env.TEST_API_ENDPOINT,
     auth: auth
 });
@@ -87,19 +91,12 @@ async function main() {
     });
     console.log('仮予約が作成されました。', seatReservationAuthorizeAction.id);
 
-    const amount = seatReservationAuthorizeAction.result.price;
-    console.log('クレジットカードのオーソリをとります...');
-    const { creditCardAuthorizeAction, numberOfTryAuthorizeCreditCard } = await authorieCreditCardUntilSuccess(
-        transaction.id, amount
-    );
-    console.log(`${numberOfTryAuthorizeCreditCard}回目でオーソリがとれました。アクションID:`, creditCardAuthorizeAction.id);
-
     // 購入者情報登録
     console.log('購入者情報を入力しています...');
     await wait(1000);
     let customerContact = {
-        last_name: 'せい',
-        first_name: 'めい',
+        last_name: 'POSせい',
+        first_name: 'POSめい',
         email: 'hello@motionpicture.jp',
         tel: '+819012345678',
         gender: '0'
@@ -120,41 +117,19 @@ async function main() {
     });
     console.log('取引確定です。', transactionResult.eventReservations[0].payment_no);
     console.log('取引確定です。', transactionResult.order.orderNumber);
-}
 
-const RETRY_INTERVAL_IN_MILLISECONDS = 1000;
-const MAX_NUMBER_OF_RETRY = 10;
-async function authorieCreditCardUntilSuccess(transactionId, amount) {
-    let creditCardAuthorizeAction = null;
-    let numberOfTryAuthorizeCreditCard = 0;
+    await wait(3000);
 
-    while (creditCardAuthorizeAction === null) {
-        numberOfTryAuthorizeCreditCard += 1;
-
-        await wait(RETRY_INTERVAL_IN_MILLISECONDS);
-
-        try {
-            creditCardAuthorizeAction = await placeOrderTransactions.createCreditCardAuthorization({
-                transactionId: transactionId,
-                amount: amount,
-                method: '1',
-                creditCard: {
-                    cardNo: '4111111111111111',
-                    expire: '2020',
-                    holderName: 'TARO MOTIONPICTURE'
-                }
-            });
-        } catch (error) {
-            if (numberOfTryAuthorizeCreditCard >= MAX_NUMBER_OF_RETRY) {
-                throw error;
-            }
-        }
-    }
-
-    return {
-        creditCardAuthorizeAction,
-        numberOfTryAuthorizeCreditCard
-    };
+    // すぐに注文返品
+    console.log('返品しています...');
+    await returnOrderService.confirm({
+        performanceDay: moment(performance.startDate).format('YYYYMMDD'),
+        paymentNo: transactionResult.eventReservations[0].payment_no,
+        cancellationFee: 0,
+        // forcibly: true,
+        reason: tttsapi.factory.transaction.returnOrder.Reason.Customer
+    });
+    console.log('返品しました');
 }
 
 async function wait(waitInMilliseconds) {
