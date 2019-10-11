@@ -18,6 +18,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v3.0.0 - 2019-10-11
+
+### Changed
+
+- 注文返品タスクをCinerino化
+- 注文返品取引インターフェースをCinerino化
+
 ## v2.0.0 - 2019-10-07
 
 ### Changed
