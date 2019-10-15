@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Removed
 
+- 注文取引サービスを削除(Cinerino移行)
+- 注文返品取引サービスを削除(Cinerino移行)
+- 注文サービスを削除(Cinerino移行)
+
 ### Fixed
 
 ### Security
