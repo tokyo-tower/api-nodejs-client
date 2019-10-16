@@ -18,6 +18,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v4.0.0 - 2019-10-16
+
+### Removed
+
+- 注文取引サービスを削除(Cinerino移行)
+- 注文返品取引サービスを削除(Cinerino移行)
+- 注文サービスを削除(Cinerino移行)
+- 組織サービスを削除
+
 ## v3.0.0 - 2019-10-11
 
 ### Changed
