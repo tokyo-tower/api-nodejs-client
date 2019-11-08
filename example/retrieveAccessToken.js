@@ -7,15 +7,7 @@ const readline = require('readline');
 const tttsapi = require('../lib/index');
 
 async function main() {
-    const scopes = [
-        'phone', 'openid', 'email', 'aws.cognito.signin.user.admin', 'profile',
-        process.env.TEST_RESOURCE_IDENTIFIER + '/transactions',
-        process.env.TEST_RESOURCE_IDENTIFIER + '/events.read-only',
-        process.env.TEST_RESOURCE_IDENTIFIER + '/organizations.read-only',
-        process.env.TEST_RESOURCE_IDENTIFIER + '/people.contacts',
-        process.env.TEST_RESOURCE_IDENTIFIER + '/people.creditCards',
-        process.env.TEST_RESOURCE_IDENTIFIER + '/people.ownershipInfos.read-only'
-    ];
+    const scopes = [];
 
     const auth = new tttsapi.auth.OAuth2({
         domain: process.env.TEST_AUTHORIZE_SERVER_DOMAIN,
