@@ -11,9 +11,7 @@ async function main() {
         domain: process.env.TEST_AUTHORIZE_SERVER_DOMAIN,
         clientId: process.env.TEST_CLIENT_ID,
         clientSecret: process.env.TEST_CLIENT_SECRET,
-        scopes: [
-            process.env.TEST_RESOURCE_IDENTIFIER + '/performances.read-only'
-        ],
+        scopes: [],
         state: 'teststate'
     });
 
