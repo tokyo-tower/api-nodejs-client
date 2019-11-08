@@ -14,11 +14,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Removed
 
-- 印刷トークン発行サービスを削除
-
 ### Fixed
 
 ### Security
+
+## v5.0.0 - 2019-11-08
+
+### Removed
+
+- 印刷トークン発行サービスを削除
 
 ## v4.2.0 - 2019-10-25
 
