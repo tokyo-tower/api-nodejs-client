@@ -8,8 +8,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
-- 購入番号発行サービスを追加
-
 ### Changed
 
 ### Deprecated
@@ -19,6 +17,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v5.1.0 - 2019-11-12
+
+### Added
+
+- 購入番号発行サービスを追加
 
 ## v5.0.0 - 2019-11-08
 
