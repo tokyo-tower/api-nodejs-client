@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v5.3.0 - 2019-12-03
+
+### Added
+
+- 券種カテゴリーレート制限サービスを追加
+
 ## v5.2.0 - 2019-11-20
 
 ### Changed
