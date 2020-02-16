@@ -14,12 +14,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Removed
 
-- 購入番号発行を削除
-- 券種カテゴリーレート制限サービスを削除
-
 ### Fixed
 
 ### Security
+
+## v6.0.0 - 2020-02-16
+
+### Removed
+
+- 購入番号発行を削除
+- 券種カテゴリーレート制限サービスを削除
 
 ## v5.3.0 - 2019-12-03
 
