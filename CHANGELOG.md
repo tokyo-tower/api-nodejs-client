@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Removed
 
+- 購入番号発行を削除
+- 券種カテゴリーレート制限サービスを削除
+
 ### Fixed
 
 ### Security
