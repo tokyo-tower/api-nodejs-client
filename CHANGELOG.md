@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v6.3.0 - 2020-06-03
+
+### Changed
+
+- update @tokyotower/factory
+
 ## v6.2.0 - 2020-03-11
 
 ### Added
