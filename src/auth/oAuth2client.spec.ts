@@ -1,16 +1,14 @@
 // tslint:disable:no-implicit-dependencies
-
 /**
  * OAuth2 client test
- * @ignore
  */
-
 import { BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED } from 'http-status';
 import * as nock from 'nock';
 import * as assert from 'power-assert';
 import * as qs from 'querystring';
+import * as sinon from 'sinon';
 import * as url from 'url';
-import * as sasaki from '../index';
+import * as client from '../index';
 
 const DOMAIN = 'DOMAIN';
 const CLIENT_ID = 'CLIENT_ID';
@@ -22,6 +20,11 @@ const STATE = 'state';
 const CODE_VERIFIER = 'codeVerifier';
 // const SCOPE = 'scopex';
 const SCOPES = ['scopex', 'scopey'];
+let sandbox: sinon.SinonSandbox;
+
+before(() => {
+    sandbox = sinon.sandbox.create();
+});
 
 describe('generateAuthUrl()', () => {
     it('有効な認可ページURLが生成されるはず', () => {
@@ -30,7 +33,7 @@ describe('generateAuthUrl()', () => {
             responseType: 'code',
             state: STATE
         };
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -54,7 +57,7 @@ describe('generateAuthUrl()', () => {
             state: STATE,
             codeVerifier: CODE_VERIFIER
         };
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -72,7 +75,7 @@ describe('generateAuthUrl()', () => {
 
 describe('generateLogoutUrl()', () => {
     it('有効なログアウトページURLが生成されるはず', () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -110,7 +113,7 @@ describe('getToken()', () => {
             .post('/token')
             .reply(OK, { access_token: 'abc123', refresh_token: 'abc123', expires_in: 1000, token_type: 'Bearer' });
 
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -133,7 +136,7 @@ describe('getToken()', () => {
                 .post('/token')
                 .reply(statusCode, {});
 
-            const auth = new sasaki.auth.OAuth2({
+            const auth = new client.auth.OAuth2({
                 domain: DOMAIN,
                 clientId: CLIENT_ID,
                 clientSecret: CLIENT_SECRET,
@@ -153,7 +156,7 @@ describe('getToken()', () => {
 
 describe('setCredentials()', () => {
     it('認証情報を正しくセットできる', async () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -182,7 +185,7 @@ describe('refreshAccessToken()', () => {
     });
 
     it('リフレッシュトークンが設定されていなければ、アクセストークンをリフレッシュできないはず', async () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -203,7 +206,7 @@ describe('refreshAccessToken()', () => {
                 .post('/token')
                 .reply(statusCode, {});
 
-            const auth = new sasaki.auth.OAuth2({
+            const auth = new client.auth.OAuth2({
                 domain: DOMAIN,
                 clientId: CLIENT_ID,
                 clientSecret: CLIENT_SECRET,
@@ -225,7 +228,7 @@ describe('refreshAccessToken()', () => {
     });
 
     // it('リフレッシュトークンがあればアクセストークンを取得できるはず', async () => {
-    //     const auth = new sasaki.auth.OAuth2({
+    //     const auth = new client.auth.OAuth2({
     //         domain: DOMAIN,
     //         clientId: CLIENT_ID,
     //         clientSecret: CLIENT_SECRET,
@@ -238,13 +241,13 @@ describe('refreshAccessToken()', () => {
     // });
 
     // it('should set access token type to Bearer if none is set', (done) => {
-    //     const oauth2client = new sasaki.auth.OAuth2(
+    //     const oauth2client = new client.auth.OAuth2(
     //         CLIENT_ID,
     //         CLIENT_SECRET,
     //         REDIRECT_URI
     //     );
     //     oauth2client.credentials = { access_token: 'foo', refresh_token: '' };
-    //     const scope = nock('https://www.sasaki.com')
+    //     const scope = nock('https://www.client.com')
     //         .get('/urlshortener/v1/url/history')
     //         .times(2)
     //         .reply(200);
@@ -261,7 +264,7 @@ describe('refreshAccessToken()', () => {
     //         .post('/o/oauth2/token')
     //         .times(2)
     //         .reply(200, { access_token: 'abc123', expires_in: 1 });
-    //     let oauth2client = new sasaki.auth.OAuth2(
+    //     let oauth2client = new client.auth.OAuth2(
     //         CLIENT_ID,
     //         CLIENT_SECRET,
     //         REDIRECT_URI
@@ -270,7 +273,7 @@ describe('refreshAccessToken()', () => {
     //     let twoSecondsAgo = now - 2000;
     //     oauth2client.credentials = { refresh_token: 'abc', expiry_date: twoSecondsAgo };
     //     testExpired(localDrive, oauth2client, now, () => {
-    //         oauth2client = new sasaki.auth.OAuth2(
+    //         oauth2client = new client.auth.OAuth2(
     //             CLIENT_ID,
     //             CLIENT_SECRET,
     //             REDIRECT_URI
@@ -289,7 +292,7 @@ describe('refreshAccessToken()', () => {
     //         .post('/o/oauth2/token')
     //         .times(2)
     //         .reply(200, { access_token: 'abc123', expires_in: 10000 });
-    //     let oauth2client = new sasaki.auth.OAuth2(
+    //     let oauth2client = new client.auth.OAuth2(
     //         CLIENT_ID,
     //         CLIENT_SECRET,
     //         REDIRECT_URI
@@ -312,7 +315,7 @@ describe('refreshAccessToken()', () => {
     //         assert.throws(() => {
     //             scope.done();
     //         }, 'AssertionError');
-    //         oauth2client = new sasaki.auth.OAuth2(
+    //         oauth2client = new client.auth.OAuth2(
     //             CLIENT_ID,
     //             CLIENT_SECRET,
     //             REDIRECT_URI
@@ -332,7 +335,7 @@ describe('refreshAccessToken()', () => {
     //         .post('/o/oauth2/token')
     //         .times(2)
     //         .reply(200, { access_token: 'abc123', expires_in: 1 });
-    //     let oauth2client = new sasaki.auth.OAuth2(
+    //     let oauth2client = new client.auth.OAuth2(
     //         CLIENT_ID,
     //         CLIENT_SECRET,
     //         REDIRECT_URI
@@ -350,7 +353,7 @@ describe('refreshAccessToken()', () => {
     //         const scope = nock('https://accounts.google.com')
     //             .get('/o/oauth2/revoke?token=abc')
     //             .reply(200, { success: true });
-    //         const oauth2client = new sasaki.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+    //         const oauth2client = new client.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
     //         oauth2client.credentials = { access_token: 'abc', refresh_token: 'abc' };
     //         oauth2client.revokeCredentials((err, result) => {
     //             assert.equal(err, null);
@@ -362,7 +365,7 @@ describe('refreshAccessToken()', () => {
     //     });
 
     //     it('should clear credentials and return error if no access token to revoke', (done) => {
-    //         const oauth2client = new sasaki.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+    //         const oauth2client = new client.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
     //         oauth2client.credentials = { refresh_token: 'abc' };
     //         oauth2client.revokeCredentials((err, result) => {
     //             assert.equal(err.message, 'No access token to revoke.');
@@ -379,7 +382,7 @@ describe('refreshAccessToken()', () => {
     //         const scope = nock('https://accounts.google.com')
     //             .post('/o/oauth2/token')
     //             .reply(200, { access_token: 'abc', refresh_token: '123', expires_in: 10 });
-    //         const oauth2client = new sasaki.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+    //         const oauth2client = new client.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
     //         oauth2client.getToken('code here', (err, tokens) => {
     //             if (err) {
     //                 return done(err);
@@ -409,7 +412,7 @@ describe('getAccessToken()', () => {
     });
 
     it('リフレッシュトークンもアクセストークンもなければ、アクセストークンを取得できないはず', async () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -439,7 +442,9 @@ describe('fetch()', () => {
             .post('/token')
             .reply(OK, { access_token: 'abc123', expires_in: 1 });
 
-        nock(API_ENDPOINT).get('/').reply(OK, {});
+        nock(API_ENDPOINT)
+            .get('/')
+            .reply(OK, {});
     });
 
     afterEach(() => {
@@ -447,7 +452,7 @@ describe('fetch()', () => {
     });
 
     it('アクセストークンがなければリフレッシュするはず', async () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -461,7 +466,7 @@ describe('fetch()', () => {
     });
 
     it('アクセストークンの期限が切れていればリフレッシュされるはず', async () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -481,7 +486,7 @@ describe('fetch()', () => {
     });
 
     it('アクセストークンの期限が切れていなければリフレッシュされないはず', async () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -500,7 +505,7 @@ describe('fetch()', () => {
     });
 
     it('アクセストークンの期限が設定されていなければ、期限は切れていないとみなすはず', async () => {
-        const auth = new sasaki.auth.OAuth2({
+        const auth = new client.auth.OAuth2({
             domain: DOMAIN,
             clientId: CLIENT_ID,
             clientSecret: CLIENT_SECRET,
@@ -526,7 +531,7 @@ describe('fetch()', () => {
                 .times(2)
                 .reply(statusCode, { error: { code: statusCode, message: 'Invalid Credentials' } });
 
-            const auth = new sasaki.auth.OAuth2({
+            const auth = new client.auth.OAuth2({
                 domain: DOMAIN,
                 clientId: CLIENT_ID,
                 clientSecret: CLIENT_SECRET,
@@ -538,20 +543,21 @@ describe('fetch()', () => {
                 refresh_token: 'refresh-token-placeholder'
             };
 
-            await auth.fetch(`${API_ENDPOINT}/access`, { method: 'GET' }, [OK]).catch((err) => err);
+            await auth.fetch(`${API_ENDPOINT}/access`, { method: 'GET' }, [OK])
+                .catch((err) => err);
             assert.equal(auth.credentials.access_token, 'abc123');
             assert(scope.isDone());
         });
     });
 
-    // tslint:disable-next-line:mocha-no-side-effect-code
+    // tslint:disable-next-line:mocha-no-side-effect-code no-null-keyword
     [{}, undefined, null].forEach((headers) => {
         it(`オプションに指定されたヘッダーが${typeof headers}の場合、正常に動作するはず`, async () => {
             const options = {
                 method: 'GET',
                 headers: <any>headers
             };
-            const auth = new sasaki.auth.OAuth2({
+            const auth = new client.auth.OAuth2({
                 domain: DOMAIN,
                 clientId: CLIENT_ID,
                 clientSecret: CLIENT_SECRET,
@@ -562,5 +568,243 @@ describe('fetch()', () => {
             await auth.fetch(`${API_ENDPOINT}/`, options, [OK]);
             assert.equal('abc123', auth.credentials.access_token);
         });
+    });
+});
+
+describe('verifyIdToken()', () => {
+    let auth: client.auth.OAuth2;
+    afterEach(() => {
+        sandbox.restore();
+    });
+    beforeEach(() => {
+        nock.cleanAll();
+        auth = new client.auth.OAuth2({
+            domain: DOMAIN,
+            clientId: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
+            redirectUri: REDIRECT_URI
+        });
+    });
+
+    afterEach(() => {
+        nock.cleanAll();
+    });
+
+    it('id tokenが適切であればユーザーネームを取り出せるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 12345,
+            exp: 12345,
+            aud: audience
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        const result = auth.verifyIdToken({ audience: audience });
+        assert.equal(typeof result, 'object');
+        sandbox.verify();
+    });
+
+    it('id tokenの形式が期待通りでなければエラーとなるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 12345,
+            exp: 12345,
+            aud: audience
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('id tokenのヘッダーが不適切な形式であればエラーとなるはず', () => {
+        const audience = 'audience';
+        // const envelope = {};
+        // const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 12345,
+            exp: 12345,
+            aud: audience
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `xxxx.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('id tokenのペイロードが不適切な形式であればエラーとなるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        // const payload = {
+        //     iat: 12345,
+        //     exp: 12345,
+        //     aud: audience
+        // };
+        // const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.xxxx.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('ペイロードにexpがなければエラーとなるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 12345,
+            // exp: 12345,
+            aud: audience
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('ペイロードにiatがなければエラーとなるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            // iat: 12345,
+            exp: 12345,
+            aud: audience
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('ペイロードのexpが数字でなければエラーとなるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 'xxxx',
+            exp: 12345,
+            aud: audience
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('ペイロードのiatが数字でなければエラーとなるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 12345,
+            exp: 'xxxx',
+            aud: audience
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('オーディエンスを指定した場合、audと合致しなければエラーとなるはず', () => {
+        const audience = 'audience';
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 12345,
+            exp: 12345,
+            aud: 'xxxx'
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('オーディエンスを配列で指定した場合、audと合致しなければエラーとなるはず', () => {
+        const audience = ['audience'];
+        const envelope = {};
+        const envelopeStr = JSON.stringify(envelope);
+        const payload = {
+            iat: 12345,
+            exp: 12345,
+            aud: 'xxxx'
+        };
+        const payLoadStr = JSON.stringify(payload);
+        const jwt = `${new Buffer(envelopeStr).toString('base64')}.${new Buffer(payLoadStr).toString('base64')}.xxxx`;
+        auth.credentials = { id_token: jwt };
+
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
+    });
+
+    it('認証情報にid_tokenがなければエラーとなるはず', () => {
+        const audience = 'audience';
+        auth.credentials = {};
+        assert.throws(
+            () => {
+                auth.verifyIdToken({ audience: audience });
+            },
+            Error
+        );
     });
 });

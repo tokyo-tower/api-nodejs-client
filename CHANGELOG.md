@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+- OAuth2認証クライアントにverifyIdTokenを追加
+
 ### Changed
 
 ### Deprecated
