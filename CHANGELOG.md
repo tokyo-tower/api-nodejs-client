@@ -8,8 +8,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
-- OAuth2認証クライアントにverifyIdTokenを追加
-
 ### Changed
 
 ### Deprecated
@@ -19,6 +17,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v6.4.0 - 2020-06-08
+
+### Added
+
+- OAuth2認証クライアントにverifyIdTokenを追加
 
 ## v6.3.0 - 2020-06-03
 
