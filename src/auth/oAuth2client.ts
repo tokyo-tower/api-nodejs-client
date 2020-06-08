@@ -1,7 +1,6 @@
 /**
  * OAuth2クライアント
  */
-
 import * as crypto from 'crypto';
 import * as createDebug from 'debug';
 import { BAD_REQUEST, FORBIDDEN, OK, UNAUTHORIZED } from 'http-status';
@@ -10,6 +9,7 @@ import * as querystring from 'querystring';
 
 import { Auth, transporters } from '@motionpicture/ttts-api-abstract-client';
 import ICredentials from './credentials';
+import { ITokenPayload, LoginTicket } from './loginTicket';
 
 const debug = createDebug('ttts-api-nodejs-client:auth:oAuth2client');
 
@@ -32,6 +32,11 @@ export interface IOptions {
     nonce?: string | null;
     audience?: string;
     tokenIssuer?: string;
+}
+
+export interface IVerifyIdTokenOptions {
+    audience?: string | string[];
+    maxExpiry?: number;
 }
 
 /**
@@ -120,7 +125,7 @@ export default class OAuth2client implements Auth {
 
     /**
      * Gets the access token for the given code.
-     * @param {string} code The authorization code.
+     * @param code The authorization code.
      */
     public async getToken(code: string, codeVerifier?: string): Promise<ICredentials> {
         const form = {
@@ -266,7 +271,7 @@ export default class OAuth2client implements Auth {
 
     /**
      * Revokes the access given to token.
-     * @param {string} token The existing token to be revoked.
+     * @param token The existing token to be revoked.
      */
     // public revokeToken(token: string) {
     // }
@@ -276,8 +281,7 @@ export default class OAuth2client implements Auth {
      * If credentials have a refresh_token, in cases of HTTP
      * 401 and 403 responses, it automatically asks for a new
      * access token and replays the unsuccessful request.
-     * @param {request.OptionsWithUri} options Request options.
-     * @return {Promise<any>}
+     * @param options Request options.
      */
     public async fetch(url: string, options: RequestInit, expectedStatusCodes: number[]) {
         // Callbacks will close over this to ensure that we only retry once
@@ -326,12 +330,24 @@ export default class OAuth2client implements Auth {
     }
 
     /**
+     * IDトークンを検証する
+     * 結果にはIDトークンの付加情報が含まれます。
+     */
+    public verifyIdToken(options: IVerifyIdTokenOptions): LoginTicket {
+        if (this.credentials.id_token === undefined) {
+            throw new Error('The verifyIdToken method requires an ID Token');
+        }
+
+        // return this.verifySignedJwt(options.idToken, options.audience, OAuth2Client.ISSUERS_);
+        return this.verifySignedJwt(this.credentials.id_token, options.audience);
+    }
+
+    /**
      * Provides a request implementation with OAuth 2.0 flow.
      * If credentials have a refresh_token, in cases of HTTP
      * 401 and 403 responses, it automatically asks for a new
      * access token and replays the unsuccessful request.
-     * @param {request.OptionsWithUri} options Request options.
-     * @return {Promise<any>}
+     * @param options Request options.
      */
     // public async request(options: request.OptionsWithUri, expectedStatusCodes: number[]) {
     //     const accessToken = await this.getAccessToken();
@@ -343,9 +359,8 @@ export default class OAuth2client implements Auth {
     /**
      * Makes a request without paying attention to refreshing or anything
      * Assumes that all credentials are set correctly.
-     * @param  {object}   opts     Options for request
-     * @param  {Function} callback callback function
-     * @return {Request}           The request object created
+     * @param opts Options for request
+     * @param callback callback function
      */
     // tslint:disable-next-line:prefer-function-over-method
     // public async makeRequest(options: request.OptionsWithUri, expectedStatusCodes: number[]) {
@@ -357,9 +372,6 @@ export default class OAuth2client implements Auth {
     /**
      * Makes a request without paying attention to refreshing or anything
      * Assumes that all credentials are set correctly.
-     * @param  {object}   opts     Options for request
-     * @param  {Function} callback callback function
-     * @return {Request}           The request object created
      */
     // tslint:disable-next-line:prefer-function-over-method
     protected async makeFetch(url: string, options: RequestInit, expectedStatusCodes: number[]) {
@@ -367,213 +379,6 @@ export default class OAuth2client implements Auth {
 
         return transporter.fetch(url, options);
     }
-
-    /**
-     * Verify id token is token by checking the certs and audience
-     * @param {string} idToken ID Token.
-     * @param {(string|Array.<string>)} audience The audience to verify against the ID Token
-     * @param {function=} callback Callback supplying GoogleLogin if successful
-     */
-    // public verifyIdToken(
-    //     idToken: string, audience: string | string[],
-    //     callback: (err: Error, login?: LoginTicket) => void) {
-    //     if (!idToken || !callback) {
-    //         throw new Error(
-    //             'The verifyIdToken method requires both ' +
-    //             'an ID Token and a callback method');
-    //     }
-
-    //     this.getFederatedSignonCerts(((err: Error, certs: any) => {
-    //         if (err) {
-    //             callback(err, null);
-    //         }
-    //         let login;
-    //         try {
-    //             login = this.verifySignedJwtWithCerts(
-    //                 idToken, certs, audience,
-    //                 OAuth2Client.ISSUERS_);
-    //         } catch (err) {
-    //             callback(err);
-    //             return;
-    //         }
-
-    //         callback(null, login);
-    //     }).bind(this));
-    // }
-
-    /**
-     * Gets federated sign-on certificates to use for verifying identity tokens.
-     * Returns certs as array structure, where keys are key ids, and values
-     * are PEM encoded certificates.
-     * @param {function=} callback Callback supplying the certificates
-     */
-    // public getFederatedSignonCerts(callback: BodyResponseCallback) {
-    //     const nowTime = (new Date()).getTime();
-    //     if (this._certificateExpiry &&
-    //         (nowTime < this._certificateExpiry.getTime())) {
-    //         callback(null, this._certificateCache);
-    //         return;
-    //     }
-
-    //     this.transporter.request(
-    //         {
-    //             method: 'GET',
-    //             uri: OAuth2Client.GOOGLE_OAUTH2_FEDERATED_SIGNON_CERTS_URL_,
-    //             json: true
-    //         },
-    //         (err, body, response) => {
-    //             if (err) {
-    //                 callback(
-    //                     new RequestError(
-    //                         'Failed to retrieve verification certificates: ' + err),
-    //                     null, response);
-    //                 return;
-    //             }
-    //             const cacheControl = response.headers['cache-control'];
-    //             let cacheAge = -1;
-    //             if (cacheControl) {
-    //                 const pattern = new RegExp('max-age=([0-9]*)');
-    //                 const regexResult = pattern.exec(cacheControl);
-    //                 if (regexResult.length === 2) {
-    //                     // Cache results with max-age (in seconds)
-    //                     cacheAge = Number(regexResult[1]) * 1000;  // milliseconds
-    //                 }
-    //             }
-
-    //             const now = new Date();
-    //             this._certificateExpiry =
-    //                 cacheAge === -1 ? null : new Date(now.getTime() + cacheAge);
-    //             this._certificateCache = body;
-    //             callback(null, body, response);
-    //         });
-    // }
-
-    /**
-     * Verify the id token is signed with the correct certificate
-     * and is from the correct audience.
-     * @param {string} jwt The jwt to verify (The ID Token in this case).
-     * @param {array} certs The array of certs to test the jwt against.
-     * @param {(string|Array.<string>)} requiredAudience The audience to test the jwt against.
-     * @param {array} issuers The allowed issuers of the jwt (Optional).
-     * @param {string} maxExpiry The max expiry the certificate can be (Optional).
-     * @return {LoginTicket} Returns a LoginTicket on verification.
-     */
-    // public verifySignedJwtWithCerts(
-    //     jwt: string, certs: any, requiredAudience: string | string[],
-    //     issuers?: string[], maxExpiry?: number) {
-    //     if (!maxExpiry) {
-    //         maxExpiry = OAuth2Client.MAX_TOKEN_LIFETIME_SECS_;
-    //     }
-
-    //     const segments = jwt.split('.');
-    //     if (segments.length !== 3) {
-    //         throw new Error('Wrong number of segments in token: ' + jwt);
-    //     }
-    //     const signed = segments[0] + '.' + segments[1];
-    //     const signature = segments[2];
-
-    //     let envelope;
-    //     let payload;
-
-    //     try {
-    //         envelope = JSON.parse(this.decodeBase64(segments[0]));
-    //     } catch (err) {
-    //         throw new Error('Can\'t parse token envelope: ' + segments[0]);
-    //     }
-
-    //     if (!envelope) {
-    //         throw new Error('Can\'t parse token envelope: ' + segments[0]);
-    //     }
-
-    //     try {
-    //         payload = JSON.parse(this.decodeBase64(segments[1]));
-    //     } catch (err) {
-    //         throw new Error('Can\'t parse token payload: ' + segments[0]);
-    //     }
-
-    //     if (!payload) {
-    //         throw new Error('Can\'t parse token payload: ' + segments[1]);
-    //     }
-
-    //     if (!certs.hasOwnProperty(envelope.kid)) {
-    //         // If this is not present, then there's no reason to attempt verification
-    //         throw new Error('No pem found for envelope: ' + JSON.stringify(envelope));
-    //     }
-    //     const pem = certs[envelope.kid];
-    //     const pemVerifier = new PemVerifier();
-    //     const verified = pemVerifier.verify(pem, signed, signature, 'base64');
-
-    //     if (!verified) {
-    //         throw new Error('Invalid token signature: ' + jwt);
-    //     }
-
-    //     if (!payload.iat) {
-    //         throw new Error('No issue time in token: ' + JSON.stringify(payload));
-    //     }
-
-    //     if (!payload.exp) {
-    //         throw new Error(
-    //             'No expiration time in token: ' + JSON.stringify(payload));
-    //     }
-
-    //     const iat = parseInt(payload.iat, 10);
-    //     const exp = parseInt(payload.exp, 10);
-    //     const now = new Date().getTime() / 1000;
-
-    //     if (exp >= now + maxExpiry) {
-    //         throw new Error(
-    //             'Expiration time too far in future: ' + JSON.stringify(payload));
-    //     }
-
-    //     const earliest = iat - OAuth2Client.CLOCK_SKEW_SECS_;
-    //     const latest = exp + OAuth2Client.CLOCK_SKEW_SECS_;
-
-    //     if (now < earliest) {
-    //         throw new Error(
-    //             'Token used too early, ' + now + ' < ' + earliest + ': ' +
-    //             JSON.stringify(payload));
-    //     }
-
-    //     if (now > latest) {
-    //         throw new Error(
-    //             'Token used too late, ' + now + ' > ' + latest + ': ' +
-    //             JSON.stringify(payload));
-    //     }
-
-    //     if (issuers && issuers.indexOf(payload.iss) < 0) {
-    //         throw new Error(
-    //             'Invalid issuer, expected one of [' + issuers + '], but got ' +
-    //             payload.iss);
-    //     }
-
-    //     // Check the audience matches if we have one
-    //     if (typeof requiredAudience !== 'undefined' && requiredAudience !== null) {
-    //         const aud = payload.aud;
-    //         let audVerified = false;
-    //         // If the requiredAudience is an array, check if it contains token
-    //         // audience
-    //         if (requiredAudience.constructor === Array) {
-    //             audVerified = (requiredAudience.indexOf(aud) > -1);
-    //         } else {
-    //             audVerified = (aud === requiredAudience);
-    //         }
-    //         if (!audVerified) {
-    //             throw new Error(
-    //                 'Wrong recipient, payload audience != requiredAudience');
-    //         }
-    //     }
-    //     return new LoginTicket(envelope, payload);
-    // }
-
-    /**
-     * This is a utils method to decode a base64 string
-     * @param {string} b64String The string to base64 decode
-     * @return {string} The decoded string
-     */
-    // public decodeBase64(b64String: string) {
-    //     const buffer = new Buffer(b64String, 'base64');
-    //     return buffer.toString('utf8');
-    // }
 
     /**
      * Refreshes the access token.
@@ -627,5 +432,82 @@ export default class OAuth2client implements Auth {
                     return tokens;
                 }
             });
+    }
+
+    /**
+     * Verify the id token is signed with the correct certificate
+     * and is from the correct audience.
+     * @param jwt The jwt to verify (The ID Token in this case).
+     * @param requiredAudience The audience to test the jwt against.
+     * @param issuers The allowed issuers of the jwt (Optional).
+     */
+    // tslint:disable-next-line:prefer-function-over-method
+    private verifySignedJwt(jwt: string, requiredAudience?: string | string[]) {
+        // private verifySignedJwt(jwt: string, requiredAudience: string | string[], issuers?: string[]) {
+        const segments = jwt.split('.');
+        // tslint:disable-next-line:no-magic-numbers
+        if (segments.length !== 3) {
+            throw new Error(`Wrong number of segments in token: ${jwt}`);
+        }
+        // const signed = `${segments[0]}.${segments[1]}`;
+        // // tslint:disable-next-line:no-magic-numbers
+        // const signature = segments[2];
+
+        let envelope: any;
+        let payload: ITokenPayload;
+
+        try {
+            envelope = JSON.parse(new Buffer(segments[0], 'base64').toString('utf8'));
+        } catch (err) {
+            throw new Error(`Can't parse token envelope: ${segments[0]}`);
+        }
+
+        try {
+            payload = JSON.parse(new Buffer(segments[1], 'base64').toString('utf8'));
+        } catch (err) {
+            throw new Error(`Can't parse token payload: ${segments[0]}`);
+        }
+
+        if (payload.iat === undefined) {
+            throw new Error(`No issue time in token: ${JSON.stringify(payload)}`);
+        }
+
+        if (payload.exp === undefined) {
+            throw new Error(`No expiration time in token: ${JSON.stringify(payload)}`);
+        }
+
+        if (isNaN(payload.iat)) {
+            throw new Error('iat field using invalid format');
+        }
+
+        if (isNaN(payload.exp)) {
+            throw new Error('exp field using invalid format');
+        }
+
+        // if (issuers !== undefined && issuers.indexOf(payload.iss) < 0) {
+        //     throw new Error(`Invalid issuer, expected one of [${issuers}], but got ${payload.iss}`);
+        // }
+
+        // Check the audience matches if we have one
+        // tslint:disable-next-line:no-single-line-block-comment
+        /* istanbul ignore else */
+        if (requiredAudience !== undefined) {
+            const aud = payload.aud;
+            let audVerified = false;
+            // If the requiredAudience is an array, check if it contains token
+            if (Array.isArray(requiredAudience)) {
+                audVerified = (requiredAudience.indexOf(aud) > -1);
+            } else {
+                audVerified = (aud === requiredAudience);
+            }
+            if (!audVerified) {
+                throw new Error('Wrong recipient, payload audience != requiredAudience');
+            }
+        }
+
+        return new LoginTicket({
+            envelope: envelope,
+            payload: payload
+        });
     }
 }
