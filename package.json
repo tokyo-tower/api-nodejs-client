@@ -1,6 +1,6 @@
 {
   "name": "@motionpicture/ttts-api-nodejs-client",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "TTTS API client library for Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/motionpicture/ttts-api-nodejs-client.git"
+    "url": "https://github.com/tokyo-tower/api-nodejs-client.git"
   },
   "keywords": [
     "ttts"
@@ -78,7 +78,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@motionpicture/ttts-api-abstract-client": "^7.0.0",
+    "@motionpicture/ttts-api-abstract-client": "^7.1.0",
     "debug": "^3.2.6",
     "http-status": "^1.4.2",
     "isomorphic-fetch": "^2.2.1"
