@@ -49,7 +49,6 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "@motionpicture/gmo-service": "^4.3.0",
     "@types/debug": "0.0.30",
     "@types/form-data": "^2.5.0",
     "@types/http-status": "^0.2.30",
@@ -78,7 +77,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@motionpicture/ttts-api-abstract-client": "^7.1.0",
+    "@motionpicture/ttts-api-abstract-client": "^7.2.0",
     "debug": "^3.2.6",
     "http-status": "^1.4.2",
     "isomorphic-fetch": "^2.2.1"
