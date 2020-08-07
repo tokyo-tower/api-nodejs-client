@@ -20,9 +20,11 @@ async function main() {
         auth: auth
     });
 
-    const result = await event.searchPerformances({
-        start_from: moment().add(1, 'day').toDate(),
-        start_through: moment().add(2, 'day').toDate()
+    const result = await event.search({
+        startFrom: moment().add(1, 'day').toDate(),
+        startThrough: moment().add(2, 'day').toDate(),
+        countDocuments: '1',
+        useLegacySearch: '1'
     });
     console.log('performances found', result);
     console.log('performances found', result.data.data.length);
