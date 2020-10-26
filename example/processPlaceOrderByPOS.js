@@ -20,10 +20,10 @@ const eventService = new tttsapi.service.Event({
 
 async function main() {
     const day = moment()
-        .add(1, 'day')
+        .add(30, 'day')
         .format('YYYYMMDD');
 
-    const searchPerformancesResult = await eventService.fetch({
+    let searchPerformancesResult = await eventService.fetch({
         uri: '/performances',
         method: 'GET',
         qs: { day: day },
@@ -38,12 +38,24 @@ async function main() {
     const performances = searchPerformancesResult.data.data;
     console.log(performances);
 
-    const performance = performances.find((p) => p.attributes.seat_status > 0);
+    let performance = performances.find((p) => p.attributes.seat_status > 0);
     if (performance === undefined) {
         throw new Error('予約可能なパフォーマンスが見つかりません。');
     }
 
     console.log('パフォーマンスを決めています...');
+    searchPerformancesResult = await eventService.fetch({
+        uri: '/performances',
+        method: 'GET',
+        qs: { performanceId: performance.id },
+        expectedStatusCodes: [httpStatus.OK]
+    })
+        .then(async (response) => {
+            return {
+                data: await response.json()
+            };
+        });
+    performance = searchPerformancesResult.data.data[0];
     await wait(1000);
     console.log('取引を開始します... パフォーマンス:', performance.id);
 
@@ -59,10 +71,11 @@ async function main() {
         expectedStatusCodes: [httpStatus.CREATED]
     })
         .then(async (response) => response.json());
-    console.log('取引が開始されました。', transaction.id);
+    console.log('取引が開始されました。', transaction);
 
     // 仮予約
-    console.log('券種を選択しています...');
+    console.log('券種を選択しています...', performance.attributes.ticket_types.map((t) => t.id));
+
     await wait(1000);
     let ticketType = performance.attributes.ticket_types.find((t) => t.id === '001');
     let seatReservationAuthorizeAction = await eventService.fetch({
