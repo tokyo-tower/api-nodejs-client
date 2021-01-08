@@ -1,6 +1,6 @@
 {
   "name": "@motionpicture/ttts-api-nodejs-client",
-  "version": "8.0.3",
+  "version": "9.0.0",
   "description": "TTTS API client library for Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
