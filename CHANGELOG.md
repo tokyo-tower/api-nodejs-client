@@ -14,11 +14,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Removed
 
-- 予約サービスを削除
-
 ### Fixed
 
 ### Security
+
+## v9.0.0 - 2021-01-08
+
+### Removed
+
+- 予約サービスを削除
 
 ## v8.0.3 - 2021-01-04
 
