@@ -10,8 +10,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- GET /eventsをGET /performancesへ移行
-
 ### Deprecated
 
 ### Removed
@@ -19,6 +17,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v9.3.0 - 2021-01-20
+
+### Changed
+
+- GET /eventsをGET /performancesへ移行
 
 ## v9.2.1 - 2021-01-19
 
